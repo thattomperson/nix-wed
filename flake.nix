@@ -12,7 +12,8 @@
   outputs = inputs@{ self, nixpkgs, home-manager }: {
     mkNixos = config:
       let
-        modules = map (module: import module (inputs // self)) config.modules;
+        modules = map (module: import module (inputs // { lib = self; }))
+          config.modules;
         nixosModules = nixpkgs.lib.flatten (map
           (module: [ module.nixosModules.default ] ++ module.nixosModules.extra)
           modules);
