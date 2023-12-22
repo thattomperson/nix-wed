@@ -3,16 +3,22 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixlib.url = "github:nix-community/nixpkgs.lib";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, nixlib }: {
+    importAll = path:
+      let
+        importers = import ./importers.nix { inherit (nixlib) lib; };
+        modules = importers.importExportableModules path;
+      in modules;
     mkNixos = config:
       let
-        args = inputs // { lib = self; } // (config.specialArgs or { });
+        args = inputs // { wed = self; } // (config.specialArgs or { });
         modules = map (module: import module args) config.modules;
         nixosModules = nixpkgs.lib.flatten (map
           (module: [ module.nixosModules.default ] ++ module.nixosModules.extra)
