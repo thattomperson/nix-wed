@@ -67,9 +67,9 @@
               isNormalUser = true;
               name = user.name;
               home = user.home or "/home/${user.name}";
-              initialPassword = "password";
             } // (if isNixos then {
               extraGroups = user.groups or [ ];
+              initialPassword = "password";
             } else
               { });
             home-manager.users."${user.name}" = {
