@@ -111,6 +111,7 @@
             else
               { });
           };
+        darwinModules.extra = profile.extraDarwinModules or [ ];
         darwinModules.default = { config, lib, pkgs, ... }@input:
           with lib;
           let
