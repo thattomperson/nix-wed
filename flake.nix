@@ -15,7 +15,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nixlib }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nixlib, ... }:
     let
       mkSystem = type: config:
         let
