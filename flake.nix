@@ -64,10 +64,10 @@
             }
           ] ++ nixpkgs.lib.forEach config.users (user: {
             users.users."${user.name}" = {
-              isNormalUser = true;
               name = user.name;
               home = user.home or "/home/${user.name}";
             } // (if isNixos then {
+              isNormalUser = true;
               extraGroups = user.groups or [ ];
               initialPassword = "password";
             } else
