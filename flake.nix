@@ -20,6 +20,8 @@
       mkSystem = type: config:
         let
           osType = if type == "nixos" then "linux" else type;
+          isDarwin = type == "darwin";
+          isNixos = type == "nixos";
 
           args = inputs // { wed = self; } // (config.specialArgs or { });
           modules = map (module: import module args) config.modules;
@@ -65,9 +67,11 @@
               isNormalUser = true;
               name = user.name;
               home = user.home or "/home/${user.name}";
-              extraGroups = user.groups or [ ];
               initialPassword = "password";
-            };
+            } // (if isNixos then {
+              extraGroups = user.groups or [ ];
+            } else
+              { });
             home-manager.users."${user.name}" = {
               home.stateVersion = user.stateVersion or "23.11";
               profiles = user.profiles or { };
