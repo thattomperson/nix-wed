@@ -50,7 +50,10 @@
               system.stateVersion = config.stateVersion or "23.11";
               profiles = config.profiles or { };
             }
-            home-manager.nixosModules.home-manager
+            {
+              "nixos" = home-manager.nixosModules.home-manager;
+              "darwin" = home-manager.darwinModules.home-manager;
+            }."${type}"
             {
               home-manager.sharedModules = homeManagerModules;
               home-manager.useGlobalPkgs = true;
