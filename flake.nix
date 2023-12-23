@@ -49,7 +49,8 @@
           modules = [
             {
               networking.hostName = config.name;
-              system.stateVersion = config.stateVersion or "23.11";
+              system.stateVersion =
+                config.stateVersion or (if isNixos then "23.11" else 4);
               profiles = config.profiles or { };
             }
             {
