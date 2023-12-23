@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     home-manager = {
@@ -11,7 +15,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-darwin, home-manager, nixlib }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nixlib }:
     let
       mkSystem = type: config:
         let
@@ -34,7 +38,7 @@
             ++ module.homeManagerModules.extra) modules);
           mkSystem = {
             "nixos" = nixpkgs.lib.nixosSystem;
-            "darwin" = nixpkgs-darwin.lib.darwinSystem;
+            "darwin" = nix-darwin.lib.darwinSystem;
           }."${type}";
 
         in mkSystem {
